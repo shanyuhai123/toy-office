@@ -1,0 +1,30 @@
+.excel-status-bar {
+  @bar-height: 32px;
+  @bar-padding: 4px;
+  @bar-content-height: @bar-height - @bar-padding * 2;
+
+  height: @bar-height;
+  border-bottom: 1px solid #d4d4d4;
+  padding: @bar-padding 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+
+  .current-coordinate {
+    display: inline-block;
+    height: @bar-content-height;
+    line-height: @bar-content-height;
+    width: 80px;
+    padding: 0 10px;
+    border: 1px solid #c6c6c6;
+    margin-right: 10px;
+  }
+
+  .calc-function {
+    flex: 1 1 auto;
+    height: @bar-content-height;
+    border: 1px solid #ccc;
+    padding-left: 10px;
+  }
+}
