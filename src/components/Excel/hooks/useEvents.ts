@@ -3,10 +3,11 @@ import { nextTick, watch } from '@vue/runtime-core'
 import { cell, theme } from '../config'
 import { CanvasSize } from '../types'
 
-export const useCanvasClick = (contentLayerContext: Ref<CanvasRenderingContext2D>, size: CanvasSize) => {
+export const useCanvasClick = (contentLayerContext: Ref<CanvasRenderingContext2D | null>, size: CanvasSize) => {
   const handleCanvasClick = ref((...args: any) => { })
 
   watch(contentLayerContext, async (ctx) => {
+    if (!ctx) return
     await nextTick()
 
     handleCanvasClick.value = (e: MouseEvent) => {
@@ -35,7 +36,7 @@ export const useCanvasClick = (contentLayerContext: Ref<CanvasRenderingContext2D
   }
 }
 
-export const useCanvasDoubleClick = (contentLayerContext: Ref<CanvasRenderingContext2D>, size: CanvasSize) => {
+export const useCanvasDoubleClick = (contentLayerContext: Ref<CanvasRenderingContext2D | null>, size: CanvasSize) => {
   const handleCanvasDoubleClick = ref((...args: any) => { })
   const top = ref(-9999)
   const left = ref(-9999)

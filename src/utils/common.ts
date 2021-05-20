@@ -20,3 +20,6 @@ const geometricProgression = (end: number, start = 1): number[] =>
 
 // 生成英文 A-Z
 export const EnglishChar = (): string[] => geometricProgression(91, 65).map(i => String.fromCharCode(i))
+
+// 移除字符串中的 px
+export const removePx = (str: string): number => Number(str.replace('px', ''))

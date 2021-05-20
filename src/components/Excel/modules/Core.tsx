@@ -1,7 +1,6 @@
 import { useSize } from '@/hooks/useSize'
-import { defineComponent, onMounted, reactive, ref, watch } from '@vue/runtime-core'
-import { nextTick, Ref } from 'vue'
-import { initContentLayer } from '../hooks/useLayer'
+import { defineComponent, onMounted, reactive, ref } from '@vue/runtime-core'
+import { initContentLayer, initInputDOM } from '../hooks/useLayer'
 import { useCanvasClick, useCanvasDoubleClick } from '../hooks/useEvents'
 import { cell } from '../config'
 import { CanvasSize } from '../types'
@@ -17,8 +16,7 @@ export default defineComponent({
     })
     const eventLayerContext = ref<CanvasRenderingContext2D | null>(null)
     const contentLayerContext = ref<CanvasRenderingContext2D | null>(null)
-    // value
-    const cellInput = ref('你好')
+    const inputDom = ref<HTMLInputElement | null>(null)
 
     onMounted(async () => {
       const { width, height } = useSize(excelCore.value)
@@ -26,13 +24,12 @@ export default defineComponent({
       canvasSize.height = height
     })
 
-    watch(contentLayerContext, async (val) => {
-      await nextTick()
-      initContentLayer(val as CanvasRenderingContext2D, canvasSize)
-    })
-
-    const { handleCanvasClick } = useCanvasClick(eventLayerContext as Ref<CanvasRenderingContext2D>, canvasSize)
-    const { handleCanvasDoubleClick, top, left } = useCanvasDoubleClick(eventLayerContext as Ref<CanvasRenderingContext2D>, canvasSize)
+    // init
+    initContentLayer(contentLayerContext, canvasSize)
+    initInputDOM(inputDom, contentLayerContext)
+    // use
+    const { handleCanvasClick } = useCanvasClick(eventLayerContext, canvasSize)
+    const { handleCanvasDoubleClick, top, left } = useCanvasDoubleClick(eventLayerContext, canvasSize)
 
     return () => (
       <div class="excel-core" ref={excelCore}>
@@ -57,13 +54,13 @@ export default defineComponent({
         <input
           class="canvas-input"
           type="text"
-          v-model={cellInput.value}
           style={{
             width: cell.width + 'px',
             height: cell.height + 'px',
             top: top.value + 'px',
             left: left.value + 'px'
           }}
+          ref={inputDom}
         />
       </div>
     )
