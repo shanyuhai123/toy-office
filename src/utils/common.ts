@@ -20,6 +20,14 @@ const geometricProgression = (end: number, start = 1): number[] =>
 
 // 生成英文 A-Z
 export const EnglishChar = (): string[] => geometricProgression(91, 65).map(i => String.fromCharCode(i))
+// A\Z\AA\CT,存在局限性 26 * 26
+export const getColumnCharByIdx = (idx: number): string => {
+  const chars = EnglishChar()
+  const prefix = Math.floor(idx / chars.length)
+  const res = idx % chars.length
+
+  return `${prefix ? chars[prefix - 1] : ''}${chars[res]}`
+}
 
 // 移除字符串中的 px
 export const removePx = (str: string): number => Number(str.replace('px', ''))

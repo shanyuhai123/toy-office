@@ -1,4 +1,4 @@
-import { EnglishChar, removePx } from '@/utils/common'
+import { getColumnCharByIdx, removePx } from '@/utils/common'
 import { nextTick, onBeforeUnmount, onMounted, Ref, watch } from 'vue'
 import { cell } from '../config'
 import { CanvasSize } from '../types'
@@ -14,8 +14,6 @@ export const initContentLayer = (contentLayerContext: Ref<CanvasRenderingContext
     if (!ctx) return
 
     await nextTick()
-
-    const chars = EnglishChar()
 
     ctx.strokeStyle = '#DDDDDD'
     // 初始设置
@@ -35,7 +33,7 @@ export const initContentLayer = (contentLayerContext: Ref<CanvasRenderingContext
       ctx.stroke()
 
       // TODO：列文字待增强
-      ctx.fillText(chars[columnIdx] || 'UN', currentWidth + cell.width * 1.5, cell.height / 2, cell.width)
+      ctx.fillText(getColumnCharByIdx(columnIdx), currentWidth + cell.width * 1.5, cell.height / 2, cell.width)
 
       columnIdx++
     }
