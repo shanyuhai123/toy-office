@@ -1,9 +1,10 @@
+import { getColumnCharByIdx } from '@/utils/common'
 import { Ref, ref } from '@vue/reactivity'
 import { nextTick, watch } from '@vue/runtime-core'
 import { cell, theme } from '../config'
 import { CanvasSize } from '../types'
 
-export const useCanvasClick = (contentLayerContext: Ref<CanvasRenderingContext2D | null>, size: CanvasSize) => {
+export const useCanvasClick = (contentLayerContext: Ref<CanvasRenderingContext2D | null>, size: CanvasSize, emit: any) => {
   const handleCanvasClick = ref((...args: any) => { })
 
   watch(contentLayerContext, async (ctx) => {
@@ -20,6 +21,7 @@ export const useCanvasClick = (contentLayerContext: Ref<CanvasRenderingContext2D
       // TODO：选中首行首列时不触发高亮
       // 1. 后续可选择整行整列
       if (!column || !row) return
+      emit('coordinate', getColumnCharByIdx(column - 1) + row)
 
       // 先清空画布
       ctx.clearRect(0, 0, size.width, size.height)

@@ -89,7 +89,6 @@ export const initInputDOM = (inputDOM: Ref<HTMLInputElement | null>, ctx: Ref<Ca
     ctx.value.textAlign = 'center'
     ctx.value.fillText(dom.value, removePx(left) + cell.width / 2, removePx(top) + cell.height / 2, cell.width)
     dom.value = ''
-    // contentLayerContext?.value.fillText(dom.value, removePx(top) + cell.width / 2, removePx(left) + cell.height / 2, cell.width)
 
     console.log(dom.value)
   }

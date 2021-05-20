@@ -2,10 +2,16 @@ import { defineComponent } from '@vue/runtime-core'
 
 export default defineComponent({
   name: 'ExcelStatusBar',
-  setup () {
+  props: {
+    currentCoordinate: {
+      type: String,
+      default: 'A1'
+    }
+  },
+  setup (props) {
     return () => (
       <div class="excel-status-bar">
-        <span class="current-coordinate">A1</span>
+        <span class="current-coordinate">{props.currentCoordinate}</span>
         <input type="text" class="calc-function"/>
       </div>
     )
