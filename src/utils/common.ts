@@ -31,3 +31,13 @@ export const getColumnCharByIdx = (idx: number): string => {
 
 // 移除字符串中的 px
 export const removePx = (str: string): number => Number(str.replace('px', ''))
+
+// 防抖
+export const debounce = (fn: Function, ms: number = 0) => {
+  let timeoutId: number
+
+  return (...args: any) => {
+    clearTimeout(timeoutId)
+    timeoutId = setTimeout(() => fn.apply(undefined, args), ms)
+  }
+}

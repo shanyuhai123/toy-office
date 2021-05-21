@@ -1,11 +1,86 @@
-import { getColumnCharByIdx, removePx } from '@/utils/common'
-import { nextTick, onBeforeUnmount, onMounted, Ref, watch } from 'vue'
-import { cell } from '../config'
+import { debounce, getColumnCharByIdx, removePx } from '@/utils/common'
+import { nextTick, onBeforeUnmount, onMounted, onUnmounted, Ref, watch } from 'vue'
+import { cell, theme } from '../config'
 import { CanvasSize } from '../types'
+import { getCellEndpoint } from '../utils'
 
 // 初始化 event 图层
-export const initEventLayer = (eventLayerContext: Ref<CanvasRenderingContext2D | null>) => {
-  // ctx.fillStyle = 'rgba(255,255,255,0)'
+export const initEventLayer = (eventLayer: Ref<HTMLCanvasElement | null>, size: CanvasSize, emit: any) => {
+  // 选区功能由 鼠标按下 => 鼠标拖动 构成
+
+  interface RectFrame {
+    left: number
+    top: number
+    width: number
+    height: number
+  }
+
+  let firstPosition: Pick<RectFrame, 'left' | 'top'> = {
+    left: 0,
+    top: 0
+  }
+
+  const handleDrawRect = (rect: RectFrame) => {
+    const ctx = eventLayer.value?.getContext('2d')
+    if (!ctx) return
+
+    // 先清空画布
+    ctx.clearRect(0, 0, size.width, size.height)
+    // 再绘制
+    ctx.strokeStyle = theme.color
+    ctx.lineWidth = 2
+    console.log(rect)
+    ctx.strokeRect(rect.left, rect.top, rect.width, rect.height)
+  }
+
+  const handleMousemove = debounce(function (event: MouseEvent) {
+    const { position } = getCellEndpoint(event, false)
+
+    if (!firstPosition.top || !firstPosition.left) return
+    handleDrawRect({
+      left: firstPosition.left,
+      top: firstPosition.top,
+      width: position.left - firstPosition.left,
+      height: position.top - firstPosition.top
+    })
+  }, 6)
+
+  const handleMousedown = (event: MouseEvent) => {
+    eventLayer.value?.addEventListener('mousemove', handleMousemove)
+
+    const { position, sequence } = getCellEndpoint(event)
+
+    firstPosition = position
+
+    if (!sequence.row || !sequence.col) return
+
+    emit('coordinate', getColumnCharByIdx(sequence.row - 1) + sequence.col)
+    handleDrawRect({
+      left: position.left,
+      top: position.top,
+      width: cell.width,
+      height: cell.height
+    })
+  }
+
+  const handleMouseup = (event: MouseEvent) => {
+    eventLayer.value?.removeEventListener('mousemove', handleMousemove)
+
+    firstPosition = {
+      left: 0,
+      top: 0
+    }
+  }
+
+  onMounted(() => {
+    eventLayer.value?.addEventListener('mousedown', handleMousedown)
+    eventLayer.value?.addEventListener('mouseup', handleMouseup)
+  })
+
+  onUnmounted(() => {
+    eventLayer.value?.removeEventListener('mousedown', handleMousedown)
+    eventLayer.value?.removeEventListener('mouseup', handleMouseup)
+  })
 }
 
 // 初始化 content 图层

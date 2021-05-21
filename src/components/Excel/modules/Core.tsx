@@ -1,7 +1,7 @@
 import { useSize } from '@/hooks/useSize'
 import { defineComponent, onMounted, reactive, ref } from '@vue/runtime-core'
-import { initContentLayer, initInputDOM } from '../hooks/useLayer'
-import { useCanvasClick, useCanvasDoubleClick } from '../hooks/useEvents'
+import { initContentLayer, initEventLayer, initInputDOM } from '../hooks/useLayer'
+import { useCanvasDoubleClick } from '../hooks/useEvents'
 import { cell } from '../config'
 import { CanvasSize } from '../types'
 
@@ -19,8 +19,9 @@ export default defineComponent<CoreProps>({
       width: -99999,
       height: -99999
     })
-    const eventLayerContext = ref<CanvasRenderingContext2D | null>(null)
     const contentLayerContext = ref<CanvasRenderingContext2D | null>(null)
+    const eventLayer = ref<HTMLCanvasElement | null>(null)
+    const eventLayerContext = ref<CanvasRenderingContext2D | null>(null)
     const inputDom = ref<HTMLInputElement | null>(null)
 
     onMounted(async () => {
@@ -31,9 +32,9 @@ export default defineComponent<CoreProps>({
 
     // init
     initContentLayer(contentLayerContext, canvasSize)
+    initEventLayer(eventLayer, canvasSize, emit)
     initInputDOM(inputDom, contentLayerContext)
     // use
-    const { handleCanvasClick } = useCanvasClick(eventLayerContext, canvasSize, emit)
     const { handleCanvasDoubleClick, top, left } = useCanvasDoubleClick(eventLayerContext, canvasSize)
 
     return () => (
@@ -51,9 +52,9 @@ export default defineComponent<CoreProps>({
           width={canvasSize.width}
           height={canvasSize.height}
           ref={(c: any): any => {
+            eventLayer.value = c
             eventLayerContext.value = c && c.getContext('2d')
           }}
-          onClick={handleCanvasClick.value}
           onDblclick={handleCanvasDoubleClick.value}
         ></canvas>
         <input
