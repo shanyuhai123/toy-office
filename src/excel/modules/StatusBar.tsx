@@ -1,17 +1,14 @@
-import { defineComponent } from '@vue/runtime-core'
+import { defineComponent, inject } from '@vue/runtime-core'
+import { Ref } from 'vue'
 
 export default defineComponent({
   name: 'SheetStatusBar',
-  props: {
-    currentCoordinate: {
-      type: String,
-      default: 'A1'
-    }
-  },
-  setup (props) {
+  setup () {
+    const coordinate = inject('coordinate') as Ref<string>
+
     return () => (
       <div class="sheet-status-bar">
-        <span class="current-coordinate">{props.currentCoordinate}</span>
+        <span class="current-coordinate">{coordinate.value}</span>
         <input type="text" class="calc-function"/>
       </div>
     )

@@ -1,4 +1,4 @@
-import { getCurrentInstance, onMounted } from "@vue/runtime-core"
+import { getCurrentInstance, onMounted } from '@vue/runtime-core'
 
 export const safeOnMounted = (hook: () => any) => {
   const vm = getCurrentInstance()

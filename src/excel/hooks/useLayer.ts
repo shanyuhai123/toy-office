@@ -1,12 +1,16 @@
 import { debounce, getColumnCharByIdx, removePx } from '@/utils/common'
-import { nextTick, onBeforeUnmount, onMounted, onUnmounted, Ref, watch } from 'vue'
+import { inject, nextTick, onBeforeUnmount, onMounted, onUnmounted, Ref, watch } from 'vue'
 import { cell, theme } from '../config'
 import { CanvasSize } from '../types'
 import { getCellEndpoint } from '../utils'
 
 // 初始化 event 图层
-export const initEventLayer = (eventLayer: Ref<HTMLCanvasElement | null>, size: CanvasSize, emit: any) => {
+export const initEventLayer = (eventLayer: Ref<HTMLCanvasElement | null>, size: CanvasSize) => {
   // 选区功能由 鼠标按下 => 鼠标拖动 构成
+
+  // 选区范围
+  const updateCoordinate = inject('updateCoordinate') as Function
+  const updateSelectedRange = inject('updateSelectedRange') as Function
 
   interface RectFrame {
     left: number
@@ -29,8 +33,9 @@ export const initEventLayer = (eventLayer: Ref<HTMLCanvasElement | null>, size: 
     // 再绘制
     ctx.strokeStyle = theme.color
     ctx.lineWidth = 2
-    console.log(rect)
     ctx.strokeRect(rect.left, rect.top, rect.width, rect.height)
+
+    updateSelectedRange(rect.left, rect.top, rect.width, rect.height)
   }
 
   const handleMousemove = debounce(function (event: MouseEvent) {
@@ -54,7 +59,7 @@ export const initEventLayer = (eventLayer: Ref<HTMLCanvasElement | null>, size: 
 
     if (!sequence.row || !sequence.col) return
 
-    emit('coordinate', getColumnCharByIdx(sequence.row - 1) + sequence.col)
+    updateCoordinate(getColumnCharByIdx(sequence.row - 1) + sequence.col)
     handleDrawRect({
       left: position.left,
       top: position.top,
@@ -81,6 +86,15 @@ export const initEventLayer = (eventLayer: Ref<HTMLCanvasElement | null>, size: 
     eventLayer.value?.removeEventListener('mousedown', handleMousedown)
     eventLayer.value?.removeEventListener('mouseup', handleMouseup)
   })
+
+  // handle tools
+  const handleCellMerge = () => {
+    console.log('handle-cell-merge')
+  }
+
+  return {
+    handleCellMerge
+  }
 }
 
 // 初始化 content 图层

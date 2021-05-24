@@ -5,14 +5,9 @@ import { useCanvasDoubleClick } from '../hooks/useEvents'
 import { cell } from '../config'
 import { CanvasSize } from '../types'
 
-interface CoreProps {
-  onCoordinate: (str: string) => void;
-}
-
-export default defineComponent<CoreProps>({
+export default defineComponent({
   name: 'SheetCore',
-  emits: ['coordinate'],
-  setup (_, { emit }) {
+  setup () {
     // DOM
     const excelCore = ref<HTMLElement | null>(null)
     const canvasSize = reactive<CanvasSize>({
@@ -32,7 +27,7 @@ export default defineComponent<CoreProps>({
 
     // init
     initContentLayer(contentLayerContext, canvasSize)
-    initEventLayer(eventLayer, canvasSize, emit)
+    initEventLayer(eventLayer, canvasSize)
     initInputDOM(inputDom, contentLayerContext)
     // use
     const { handleCanvasDoubleClick, top, left } = useCanvasDoubleClick(eventLayerContext, canvasSize)
