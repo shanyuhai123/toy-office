@@ -10,7 +10,7 @@ interface CoreProps {
 }
 
 export default defineComponent<CoreProps>({
-  name: 'ExcelCore',
+  name: 'SheetCore',
   emits: ['coordinate'],
   setup (_, { emit }) {
     // DOM
@@ -38,7 +38,7 @@ export default defineComponent<CoreProps>({
     const { handleCanvasDoubleClick, top, left } = useCanvasDoubleClick(eventLayerContext, canvasSize)
 
     return () => (
-      <div class="excel-core" ref={excelCore}>
+      <div class="sheet-core" ref={excelCore}>
         <canvas
           class="content-layer"
           width={canvasSize.width}

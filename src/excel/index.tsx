@@ -1,10 +1,11 @@
 import { defineComponent, ref } from '@vue/runtime-core'
 import StatusBar from './modules/StatusBar'
 import Core from './modules/Core'
-import ToolBar from './modules/ToolBar'
+import ToolBar from './modules/ToolsBar'
+import './styles/index.less'
 
 export default defineComponent({
-  name: 'ExcelContainer',
+  name: 'ToySheet',
   setup () {
     const coordinate = ref('A1')
 
@@ -13,7 +14,7 @@ export default defineComponent({
     }
 
     return () => (
-      <div class="excel-container">
+      <div id="toy-sheet">
         <ToolBar />
         <StatusBar currentCoordinate={coordinate.value} />
         <Core onCoordinate={handleCoordinate}/>

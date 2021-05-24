@@ -13,7 +13,7 @@ jobs:
       - name: Install and Build 🔧
         run: |
           yarn
-          yarn build
+          yarn build:page
 
       - name: Deploy Github 🚀
         uses: peaceiris/actions-gh-pages@v3

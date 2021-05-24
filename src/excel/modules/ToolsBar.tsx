@@ -1,13 +1,13 @@
 import { defineComponent } from '@vue/runtime-core'
-import { MergeCells } from '@icon-park/vue-next'
+import { MergeCellsOutlined } from '@ant-design/icons-vue'
 
 export default defineComponent({
-  name: 'ExcelToolBar',
+  name: 'SheetToolsBar',
   setup () {
     return () => (
-      <div class="excel-tool-bar">
+      <div class="sheet-tools-bar">
         <span class="tool-item" title="合并单元格" >
-          <MergeCells size="1.4em" />
+         <MergeCellsOutlined />
         </span>
       </div>
     )

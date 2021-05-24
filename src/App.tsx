@@ -1,5 +1,5 @@
 import { computed, defineComponent, ref } from 'vue'
-import Excel from './components/Excel'
+import Excel from './excel'
 import { getStrLen } from './utils/common'
 
 export default defineComponent({
@@ -13,7 +13,7 @@ export default defineComponent({
     })
 
     return () => (
-      <div id="toy-sheet">
+      <div id="sheet-app">
         <header class="toy-sheet-header">
           <input type="text" class="sheet-name" v-model={sheetName.value} style={{ width: sheetNameWidth.value }} placeholder="请输入名称" />
         </header>
