@@ -1,5 +1,5 @@
 {
-  "name": "toy-sheet",
+  "name": "toy-office",
   "version": "1.0.0",
   "main": "./lib/toy-sheet.umd.js",
   "module": "./lib/toy-sheet.es.js",

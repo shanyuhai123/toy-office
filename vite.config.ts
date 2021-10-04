@@ -8,7 +8,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
   const isLib = mode === 'lib'
 
   return {
-    base: isLib ? '/' : '/toy-sheet/',
+    base: isLib ? '/' : '/toy-office/',
     plugins: [vueJsx()],
     resolve: {
       alias: {
@@ -19,7 +19,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
       ? {
           lib: {
             entry: resolve(__dirname, './src/index.ts'),
-            name: 'toy-sheet'
+            name: 'toy-office'
 
           },
           outDir: 'lib',
